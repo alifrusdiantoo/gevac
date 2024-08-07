@@ -1,0 +1,26 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+header {
+    height: 56px; /* Adjust for navbar height */
+}
+main {
+    display: flex;
+    height: calc(100% - 56px); /* Adjust for navbar height */
+}
+aside {
+    overflow-y: auto;
+    height: 100%;
+}
+section {
+    overflow-y: auto;
+    flex-grow: 1;
+    height: 100%;
+    padding: 20px;
+}
+
+.fs-sm {
+    font-size: 0.8rem;
+}
