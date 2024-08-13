@@ -16,13 +16,13 @@ function closeModal(modalId) {
 }
 
 function openEditModal(id, name) {
-    document.getElementById('edit-category-form').action = '/dashboard/categories/' + id;
-    document.getElementById('edit-category-name').value = name;
-    openModal('edit-category-modal');
+    document.getElementById('edit-data-form').action = '/users/edit/' + id;
+    document.getElementById('edit-data-name').value = name;
+    openModal('edit-data-modal');
 }
 
 function openDeleteModal(id) {
-    document.getElementById('delete-category-form').action = '/dashboard/categories/' + id;
-    document.getElementById('id-category').innerHTML = id;
-    openModal('delete-category-modal');
+    document.getElementById('deleteDataForm').action = '/users/' + id;
+    document.getElementById('idData').innerHTML = id;
+    openModal('deleteDataModal');
 }
