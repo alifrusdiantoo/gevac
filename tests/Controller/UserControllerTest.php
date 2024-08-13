@@ -78,6 +78,7 @@ class UserControllerTest extends TestCase
 
     public function testPostRegisterValidationError(): void
     {
+        $_POST["nama"] = "";
         $_POST["username"] = "alifrusdi";
         $_POST["password"] = "password";
         $_POST["roles"] = "admin";
@@ -186,6 +187,7 @@ class UserControllerTest extends TestCase
         $this->userRepository->insert($user);
 
         $_POST["id"] = "1";
+        $_POST["nama"] = "";
         $_POST["username"] = "alif.rusdianto";
         $_POST["roles"] = "admin";
 

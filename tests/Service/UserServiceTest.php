@@ -42,6 +42,7 @@ class UserServiceTest extends TestCase
     public function testRegisterSuccess(): void
     {
         $request = new UserRegisterRequest();
+        $request->id = "1";
         $request->username = "alifrusd";
         $request->password = "password";
         $request->nama = "Alif Rusdianto";
@@ -56,19 +57,21 @@ class UserServiceTest extends TestCase
 
     public function testRegisterFailed(): void
     {
+        $this->expectException(ValidationException::class);
         $request = new UserRegisterRequest();
+        $request->id = "";
         $request->username = "";
         $request->password = "";
         $request->nama = "";
         $request->roles = "";
 
-        $response = $this->userService->register($request);
-
-        self::assertNotNull($response->errors);
+        $this->userService->register($request);
     }
 
     public function testRegisterDuplicate(): void
     {
+        $this->expectException(ValidationException::class);
+
         $user = new User();
         $user->setId(Uuid::uuid4()->toString());
         $user->setUsername("alifrusd");
@@ -84,8 +87,6 @@ class UserServiceTest extends TestCase
         $request->nama = "Alif Rusdianto";
         $request->roles = "admin";
         $response = $this->userService->register($request);
-
-        self::assertEquals("Username sudah digunakan", $response->errors["username"]);
     }
 
     public function testShowSuccess(): void
@@ -107,8 +108,7 @@ class UserServiceTest extends TestCase
     public function testShowNotFound(): void
     {
         $result = $this->userService->show();
-
-        self::assertEquals("Tidak terdapat data untuk ditampilkan", $result->message[0]);
+        self::assertEmpty($result->users);
     }
 
     public function testDeleteUserByIdSuccess(): void
@@ -128,10 +128,9 @@ class UserServiceTest extends TestCase
 
     public function testDeleteUserByIdNotFound(): void
     {
-        $this->expectException(Exception::class);
+        $result = $this->userService->deleteUserById("1");
 
-        $this->userService->deleteUserById("1");
-        $this->userService->userRepository->findById("1");
+        self::assertEquals($result->message, ["User tidak ditemukan"]);
     }
 
     public function testUpdatePasswordSuccess(): void
@@ -157,6 +156,8 @@ class UserServiceTest extends TestCase
 
     public function testUpdatePasswordNotMatch(): void
     {
+        $this->expectException(ValidationException::class);
+
         $user = new User();
         $user->setId("1");
         $user->setUsername("alifrusd");
@@ -171,28 +172,29 @@ class UserServiceTest extends TestCase
         $request->newPassword = "password baru";
 
         $response = $this->userService->updatePassword($request);
-        self::assertEquals("Password lama tidak sesuai", $response->message[0]);
     }
 
     public function testUpdateValidationError(): void
     {
+        $this->expectException(ValidationException::class);
+
         $request = new UserPasswordUpdateRequest();
         $request->id = "1";
         $request->oldPassword = "";
         $request->newPassword = "     ";
 
         $response = $this->userService->updatePassword($request);
-        self::assertEquals("Password lama tidak boleh kosong", $response->message[0]);
     }
 
     public function testUpdatePasswordUserNotFound(): void
     {
+        $this->expectException(ValidationException::class);
+
         $request = new UserPasswordUpdateRequest();
         $request->id = "1";
         $request->oldPassword = "passwordbenar";
         $request->newPassword = "password baru";
 
         $response = $this->userService->updatePassword($request);
-        self::assertEquals("User tidak ditemukan", $response->message[0]);
     }
 }

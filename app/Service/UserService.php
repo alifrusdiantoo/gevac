@@ -37,7 +37,7 @@ class UserService
             $response->success = true;
         } catch (Exception $exception) {
             $response->success = false;
-            $response->errors[] = $exception->getMessage();
+            $response->message[] = $exception->getMessage();
         }
 
         return $response;
