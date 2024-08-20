@@ -74,6 +74,30 @@ class UserRepository
         }
     }
 
+    public function findByUsername(string $username): ?User
+    {
+        $statement = $this->connection->prepare("SELECT id, username, password, nama, roles FROM users WHERE username = ?");
+        $statement->execute([$username]);
+
+        try {
+            if ($row = $statement->fetch()) {
+                $user = new User();
+
+                $user->setId($row["id"]);
+                $user->setUsername($row["username"]);
+                $user->setPassword($row["password"]);
+                $user->setNama($row["nama"]);
+                $user->setRoles($row["roles"]);
+
+                return $user;
+            } else {
+                return null;
+            }
+        } finally {
+            $statement->closeCursor();
+        }
+    }
+
     public function findDuplicateUsername(string $username, string $id): ?User
     {
         $statement = $this->connection->prepare("SELECT id, username, password, nama, roles FROM users WHERE username = ? AND id != ?");

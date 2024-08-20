@@ -6,29 +6,40 @@ use Exception;
 use Rusdianto\Gevac\App\View;
 use Ramsey\Uuid\Nonstandard\Uuid;
 use Rusdianto\Gevac\Config\Database;
+use Rusdianto\Gevac\DTO\UserLoginRequest;
 use Rusdianto\Gevac\DTO\UserPasswordUpdateRequest;
 use Rusdianto\Gevac\DTO\UserProfileUpdateRequest;
 use Rusdianto\Gevac\Service\UserService;
 use Rusdianto\Gevac\DTO\UserRegisterRequest;
 use Rusdianto\Gevac\Repository\UserRepository;
 use Rusdianto\Gevac\Exception\ValidationException;
+use Rusdianto\Gevac\Repository\SessionRepository;
+use Rusdianto\Gevac\Service\SessionService;
 
 class UserController
 {
     private UserService $userService;
+    private SessionService $sessionService;
 
     public function __construct()
     {
         $connection = Database::getConnection();
         $userRepository = new UserRepository($connection);
         $this->userService = new UserService($userRepository);
+
+        $sessionRepository = new SessionRepository($connection);
+        $this->sessionService = new SessionService($sessionRepository, $userRepository);
     }
 
     public function index(string $message = "", string $error = ""): void
     {
+        $activeUser = $this->sessionService->current();
         $user = $this->userService->show();
         View::render("User/index", [
             "title" => "Gevac | Data User",
+            "user" => [
+                "name" => $activeUser->getNama()
+            ],
             "users" => $user->users,
             "message" => $message,
             "error" => $error
@@ -61,6 +72,37 @@ class UserController
                 "error" => $exception->getMessage()
             ]);
         }
+    }
+
+    public function login(): void
+    {
+        View::render("User/login", [
+            "title" => "Gevac | Login"
+        ]);
+    }
+
+    public function postLogin(): void
+    {
+        $request = new UserLoginRequest();
+        $request->username = $_POST["username"];
+        $request->password = $_POST["password"];
+
+        try {
+            $response = $this->userService->login($request);
+            $this->sessionService->create($response->user->getId());
+            View::redirect("/users");
+        } catch (ValidationException $exception) {
+            View::render("User/login", [
+                "title" => "Gevac | Login",
+                "message" => $exception->getMessage()
+            ]);
+        }
+    }
+
+    public function logout(): void
+    {
+        $this->sessionService->destroy();
+        View::redirect("/");
     }
 
     public function delete(string $id): void

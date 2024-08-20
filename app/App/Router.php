@@ -28,6 +28,11 @@ class Router
         foreach (self::$routes as $route) {
             $pattern = "#^" . preg_replace('#\{id\}#', '([a-f0-9\-]{36})', $route['path']) . "$#";
             if (preg_match($pattern, $path, $variables) && $method == $route['method']) {
+                foreach ($route['middlewares'] as $middleware) {
+                    $instance = new $middleware;
+                    $instance->before();
+                }
+
                 $controller = new $route['controller'];
                 $function = $route['function'];
 

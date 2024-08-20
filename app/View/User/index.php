@@ -5,7 +5,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">John Doe</a>
+                        <span class="nav-link">Halo, <b><?= $model["user"]["name"] ?></b></span>
                     </li>
                 </ul>
             </div>
@@ -44,7 +44,7 @@
             </li>
             <li class="nav-item d-flex align-items-center px-3">
                 <i class="bi bi-door-open"></i>
-                <a class="nav-link text-reset" href="#">Sign Out</a>
+                <a class="nav-link text-reset" href="/logout">Sign Out</a>
             </li>
         </ul>
     </aside>
@@ -103,7 +103,8 @@
                     </table>
                 </div>
 
-                <nav aria-label="pagination data peserta vaksin" class="d-flex justify-content-end">
+                <!-- Pagination -->
+                <!-- <nav aria-label="pagination data peserta vaksin" class="d-flex justify-content-end">
                     <ul class="pagination pagination-sm">
                         <li class="page-item disabled">
                             <a class="page-link">Previous</a>
@@ -117,7 +118,7 @@
                             <a class="page-link" href="#">Next</a>
                         </li>
                     </ul>
-                </nav>
+                </nav> -->
             </div>
         </div>
     </section>

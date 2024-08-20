@@ -3,10 +3,11 @@
 namespace Rusdianto\Gevac\Service;
 
 use Exception;
-use Ramsey\Uuid\Nonstandard\Uuid;
 use Rusdianto\Gevac\Config\Database;
 use Rusdianto\Gevac\Domain\User;
 use Rusdianto\Gevac\DTO\UserDeleteResponse;
+use Rusdianto\Gevac\DTO\UserLoginRequest;
+use Rusdianto\Gevac\DTO\UserLoginResponse;
 use Rusdianto\Gevac\DTO\UserPasswordUpdateRequest;
 use Rusdianto\Gevac\DTO\UserPasswordUpdateResponse;
 use Rusdianto\Gevac\DTO\UserProfileUpdateRequest;
@@ -16,6 +17,7 @@ use Rusdianto\Gevac\DTO\UserRegisterResponse;
 use Rusdianto\Gevac\DTO\UserShowResponse;
 use Rusdianto\Gevac\Exception\ValidationException;
 use Rusdianto\Gevac\Repository\UserRepository;
+use Rusdianto\Gevac\Validators\UserLoginValidator;
 use Rusdianto\Gevac\Validators\UserRegisterValidator;
 use Rusdianto\Gevac\Validators\UserUpdatePasswordValidator;
 use Rusdianto\Gevac\Validators\UserUpdateProfileValidator;
@@ -39,6 +41,14 @@ class UserService
             $response->success = false;
             $response->message[] = $exception->getMessage();
         }
+
+        return $response;
+    }
+
+    public function login(UserLoginRequest $request): UserLoginResponse
+    {
+        UserLoginValidator::validate($request);
+        $response = UserLoginValidator::match($this->userRepository, $request);
 
         return $response;
     }
