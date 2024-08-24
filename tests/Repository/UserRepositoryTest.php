@@ -4,7 +4,6 @@ namespace Rusdianto\Gevac\Repository;
 
 use PHPUnit\Framework\TestCase;
 use Rusdianto\Gevac\Config\Database;
-use Rusdianto\Gevac\Domain\Role;
 use Rusdianto\Gevac\Domain\User;
 
 class UserRepositoryTest extends TestCase
