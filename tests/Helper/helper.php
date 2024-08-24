@@ -8,6 +8,13 @@ namespace Rusdianto\Gevac\App {
     }
 }
 
+namespace Rusdianto\Gevac\Middleware {
+    function header(string $value)
+    {
+        echo $value;
+    }
+}
+
 namespace Rusdianto\Gevac\Service {
     function setcookie(string $name, string $value)
     {
