@@ -15,14 +15,20 @@ function closeModal(modalId) {
     modal.hide();
 }
 
-function openEditModal(id, name) {
-    document.getElementById('edit-data-form').action = '/users/edit/' + id;
+function openAddModal(data) {
+    document.getElementById('add-data-form').action = `/${data}/add`;
+    openModal('add-data-modal');
+}
+
+function openEditModal(id, name, data) {
+    document.getElementById('edit-data-form').action = `/${data}/edit/` + id;
+    document.getElementById('edit-data-id').value = id;
     document.getElementById('edit-data-name').value = name;
     openModal('edit-data-modal');
 }
 
-function openDeleteModal(id) {
-    document.getElementById('deleteDataForm').action = '/users/' + id;
-    document.getElementById('idData').innerHTML = id;
-    openModal('deleteDataModal');
+function openDeleteModal(id, data) {
+    document.getElementById('delete-data-form').action = `/${data}/` + id;
+    document.getElementById('id-data').innerHTML = id;
+    openModal('delete-data-modal');
 }

@@ -3,6 +3,8 @@ require_once __DIR__ . "/../vendor/autoload.php";
 
 use Rusdianto\Gevac\App\Router;
 use Rusdianto\Gevac\Config\Database;
+use Rusdianto\Gevac\Controller\DusunController;
+use Rusdianto\Gevac\Controller\OverviewController;
 use Rusdianto\Gevac\Controller\UserController;
 use Rusdianto\Gevac\Controller\PesertaController;
 use Rusdianto\Gevac\Middleware\MustLoginMiddleware;
@@ -11,10 +13,17 @@ use Rusdianto\Gevac\Middleware\SupAdminOnlyMiddleware;
 
 Database::getConnection("prod");
 
-// Home controller
+// Overview controller
+Router::add("GET", "/overview", OverviewController::class, "index", [MustLoginMiddleware::class]);
 
 // Peserta controller
 Router::add("GET", "/peserta", PesertaController::class, "index", [MustLoginMiddleware::class]);
+
+// Dusun controller
+Router::add("GET", "/dusun", DusunController::class, "index", [MustLoginMiddleware::class, SupAdminOnlyMiddleware::class]);
+Router::add("POST", "/dusun/add", DusunController::class, "add", [MustLoginMiddleware::class, SupAdminOnlyMiddleware::class]);
+Router::add("POST", "/dusun/{id}", DusunController::class, "delete", [MustLoginMiddleware::class, SupAdminOnlyMiddleware::class]);
+Router::add("POST", "/dusun/edit/{id}", DusunController::class, "update", [MustLoginMiddleware::class, SupAdminOnlyMiddleware::class]);
 
 // User controller
 Router::add("GET", "/", UserController::class, "login", [MustNotLoginMiddleware::class]);

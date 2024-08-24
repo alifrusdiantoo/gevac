@@ -1,38 +1,5 @@
        <main class="row container-fluid m-0 p-0">
-           <aside class="col-sm-2 shadow-sm p-3">
-               <ul class="nav flex-column gap-2">
-                   <li class="nav-item d-flex align-items-center">
-                       <i class="bi bi-speedometer2 me-2"></i>
-                       <a class="nav-link active text-reset" href="#">Dashboard</a>
-                   </li>
-                   <li class="nav-item d-flex align-items-center">
-                       <i class="bi bi-person me-2"></i>
-                       <a class="nav-link active text-reset" href="#">Profile</a>
-                   </li>
-                   <li class="nav-item">
-                       <div class="accordion accordion-flush" id="accordionFlushExample">
-                           <div class="accordion-item">
-                               <h2 class="accordion-header p-0">
-                                   <button class="accordion-button collapsed p-0" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                                       <i class="bi bi-file-text me-2"></i>
-                                       <a class="nav-link text-reset" href="#">Data</a>
-                                   </button>
-                               </h2>
-                               <div id="flush-collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushExample">
-                                   <div class="accordion-body d-flex flex-column gap-2 py-0">
-                                       <a href="" class="nav-link text-reset">Dusun</a>
-                                       <a href="" class="nav-link text-reset">Admin</a>
-                                   </div>
-                               </div>
-                           </div>
-                       </div>
-                   </li>
-                   <li class="nav-item d-flex align-items-center">
-                       <i class="bi bi-door-open me-2"></i>
-                       <a class="nav-link text-reset" href="#">Sign Out</a>
-                   </li>
-               </ul>
-           </aside>
+           <?php require_once __DIR__ . "/../Component/sidebar.php" ?>
 
            <section class="col bg-light">
                <div class="container-fluid mt-4 p-0">

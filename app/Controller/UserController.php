@@ -66,7 +66,7 @@ class UserController
             $response = $this->userService->register($request);
             $this->index(message: implode("", $response->message));
             echo "<script>history.replaceState({}, '', '/users');</script>";
-        } catch (ValidationException $exception) {
+        } catch (Exception $exception) {
             $this->register(error: $exception->getMessage());
         }
     }
