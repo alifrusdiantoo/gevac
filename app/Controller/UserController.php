@@ -13,6 +13,7 @@ use Rusdianto\Gevac\Service\UserService;
 use Rusdianto\Gevac\DTO\UserRegisterRequest;
 use Rusdianto\Gevac\Repository\UserRepository;
 use Rusdianto\Gevac\Exception\ValidationException;
+use Rusdianto\Gevac\Helper\Helper;
 use Rusdianto\Gevac\Repository\SessionRepository;
 use Rusdianto\Gevac\Service\SessionService;
 
@@ -33,24 +34,23 @@ class UserController
 
     public function index(string $message = "", string $error = ""): void
     {
-        $activeUser = $this->sessionService->current();
         $user = $this->userService->show();
-        View::render("User/index", [
+        $data = Helper::prepareViewData($this->sessionService, [
             "title" => "Gevac | Data User",
-            "user" => [
-                "name" => $activeUser->getNama()
-            ],
             "users" => $user->users,
             "message" => $message,
             "error" => $error
         ]);
+        View::render("User/index", $data);
     }
 
-    public function register(): void
+    public function register(string $error = ""): void
     {
-        View::render("User/register", [
-            "title" => "Gevac | Tambah User"
+        $data = Helper::prepareViewData($this->sessionService, [
+            "title" => "Gevac | Tambah User",
+            "error" => $error
         ]);
+        View::render("User/register", $data);
     }
 
     public function postRegister(): void
@@ -67,10 +67,7 @@ class UserController
             $this->index(message: implode("", $response->message));
             echo "<script>history.replaceState({}, '', '/users');</script>";
         } catch (ValidationException $exception) {
-            View::render("User/register", [
-                "title" => "Gevac | Tambah User",
-                "error" => $exception->getMessage()
-            ]);
+            $this->register(error: $exception->getMessage());
         }
     }
 
@@ -90,7 +87,7 @@ class UserController
         try {
             $response = $this->userService->login($request);
             $this->sessionService->create($response->user->getId());
-            View::redirect("/users");
+            View::redirect("/overview");
         } catch (ValidationException $exception) {
             View::render("User/login", [
                 "title" => "Gevac | Login",
@@ -123,7 +120,7 @@ class UserController
     public function updateProfile(string $id, string $message = ""): void
     {
         $user = $this->userService->getProfile($id);
-        View::render("User/edit", [
+        $data = Helper::prepareViewData($this->sessionService, [
             "title" => "Gevac | Tambah User",
             "user" => [
                 "id" => $user->getId(),
@@ -133,6 +130,7 @@ class UserController
             ],
             "message" => $message
         ]);
+        View::render("User/edit", $data);
     }
 
     public function postUpdateProfile(): void
