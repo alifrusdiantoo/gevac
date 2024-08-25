@@ -103,7 +103,7 @@ class DusunService
             Database::commitTransaction();
 
             $response->success = true;
-            $response->message = "Dusun berhasil dihapus";
+            $response->message = "Data berhasil diubah";
         } catch (ValidationException $exception) {
             Database::rollbackTransaction();
             $response->errors[] = $exception->getMessage();
