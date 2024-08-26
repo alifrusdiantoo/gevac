@@ -32,3 +32,12 @@ function openDeleteModal(id, data) {
     document.getElementById('id-data').innerHTML = id;
     openModal('delete-data-modal');
 }
+
+if(window.location.pathname.match("[peserta/add]") || window.location.pathname.match("[peserta/edit/]")) {
+    // Validate tanggal lahir input
+    const today = new Date();
+    const maxDate = new Date(today.getFullYear() - 6, today.getMonth(), today.getDate());
+    const maxDateStr = maxDate.toISOString().split('T')[0];
+
+    document.getElementById('tglLahir').setAttribute('max', maxDateStr);
+}

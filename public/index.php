@@ -18,6 +18,11 @@ Router::add("GET", "/overview", OverviewController::class, "index", [MustLoginMi
 
 // Peserta controller
 Router::add("GET", "/peserta", PesertaController::class, "index", [MustLoginMiddleware::class]);
+Router::add("GET", "/peserta/add", PesertaController::class, "add", [MustLoginMiddleware::class]);
+Router::add("POST", "/peserta/add", PesertaController::class, "postAdd", [MustLoginMiddleware::class]);
+Router::add("POST", "/peserta/{id}", PesertaController::class, "delete", [MustLoginMiddleware::class]);
+Router::add("GET", "/peserta/edit/{id}", PesertaController::class, "update", [MustLoginMiddleware::class]);
+Router::add("POST", "/peserta/edit/{id}", PesertaController::class, "postUpdate", [MustLoginMiddleware::class]);
 
 // Dusun controller
 Router::add("GET", "/dusun", DusunController::class, "index", [MustLoginMiddleware::class, SupAdminOnlyMiddleware::class]);
