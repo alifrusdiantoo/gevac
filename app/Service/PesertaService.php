@@ -143,4 +143,9 @@ class PesertaService
         }
         return $response;
     }
+
+    public function getOverviewStatistics(): array
+    {
+        return $this->pesertaRepository->getStatistic();
+    }
 }

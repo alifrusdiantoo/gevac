@@ -129,4 +129,23 @@ class PesertaRepository
     {
         $this->connection->exec("DELETE FROM participants");
     }
+
+    public function getStatistic(): array
+    {
+        $query = "
+            SELECT
+                COUNT(*) as total_peserta,
+                SUM(CASE WHEN jenis_kelamin = 'L' THEN 1 ELSE 0 END) as total_laki_laki,
+                SUM(CASE WHEN jenis_kelamin = 'P' THEN 1 ELSE 0 END) as total_perempuan,
+                SUM(CASE WHEN dosis = '1' THEN 1 ELSE 0 END) as total_dosis_1,
+                SUM(CASE WHEN dosis = '2' THEN 1 ELSE 0 END) as total_dosis_2,
+                SUM(CASE WHEN dosis = '3' THEN 1 ELSE 0 END) as total_dosis_3,
+                AVG(YEAR(CURDATE()) - YEAR(tgl_lahir) - (DATE_FORMAT(CURDATE(), '%m-%d') < DATE_FORMAT(tgl_lahir, '%m-%d'))) as rata_rata_usia
+            FROM participants
+        ";
+
+        $statement = $this->connection->prepare($query);
+        $statement->execute();
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
 }
