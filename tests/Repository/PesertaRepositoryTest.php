@@ -113,4 +113,26 @@ class PesertaRepositoryTest extends TestCase
 
         self::assertNull($result);
     }
+
+    public function testGetStatistic(): void
+    {
+        $peserta = new Peserta();
+        $peserta->setId("1");
+        $peserta->setNik("3207116504630001");
+        $peserta->setNama("John Doe");
+        $peserta->setTglLahir("1963-04-25");
+        $peserta->setKontak("080123456789");
+        $peserta->setIdDusun("1");
+        $peserta->setRt("001");
+        $peserta->setRw("001");
+        $peserta->setJenisKelamin("L");
+        $peserta->setDosis("1");
+        $this->pesertaRepository->insert($peserta);
+
+        $result = $this->pesertaRepository->getStatistic();
+
+        self::assertEquals(1, $result["total_peserta"]);
+        self::assertEquals(1, $result["total_laki_laki"]);
+        self::assertEquals(0, $result["total_perempuan"]);
+    }
 }
