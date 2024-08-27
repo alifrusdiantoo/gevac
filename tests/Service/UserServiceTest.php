@@ -100,8 +100,6 @@ class UserServiceTest extends TestCase
         $this->userService->userRepository->insert($user);
 
         $result = $this->userService->show();
-        var_dump($result);
-
         self::assertNotNull($result);
     }
 

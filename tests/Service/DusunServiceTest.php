@@ -42,7 +42,7 @@ class DusunServiceTest extends TestCase
         $request->nama = "";
         $response = $this->dusunService->add($request);
 
-        self::assertEquals("Id tidak boleh kosong", $response->message);
+        self::assertEquals("Id tidak boleh kosong", $response->errors[0]);
     }
 
     public function testShowSuccess(): void

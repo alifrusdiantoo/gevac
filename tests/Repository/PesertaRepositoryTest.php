@@ -11,6 +11,7 @@ use Rusdianto\Gevac\Repository\PesertaRepository;
 class PesertaRepositoryTest extends TestCase
 {
     private PesertaRepository $pesertaRepository;
+    private DusunRepository $dusunRepository;
 
     protected function setUp(): void
     {
@@ -22,9 +23,15 @@ class PesertaRepositoryTest extends TestCase
         $dusun->setId("1");
         $dusun->setNama("Lorem");
 
-        $dusunRepository = new DusunRepository($connection);
-        $dusunRepository->deleteAll();
-        $dusunRepository->insert($dusun);
+        $this->dusunRepository = new DusunRepository($connection);
+        $this->dusunRepository->deleteAll();
+        $this->dusunRepository->insert($dusun);
+    }
+
+    public function tearDown(): void
+    {
+        $this->pesertaRepository->deleteAll();
+        $this->dusunRepository->deleteAll();
     }
 
     public function testInsertSuccess(): void
@@ -88,7 +95,6 @@ class PesertaRepositoryTest extends TestCase
         $this->pesertaRepository->insert($peserta);
         $result = $this->pesertaRepository->show();
 
-        echo var_dump($result);
         self::assertNotNull($result);
         self::assertEquals("3207116504630001", $result[0]["nik"]);
     }

@@ -7,6 +7,7 @@ use Rusdianto\Gevac\Config\Database;
 use Rusdianto\Gevac\Controller\DusunController;
 use Rusdianto\Gevac\Domain\Dusun;
 use Rusdianto\Gevac\Repository\DusunRepository;
+use Rusdianto\Gevac\Repository\PesertaRepository;
 
 class DusunControllerTest extends TestCase
 {
@@ -15,10 +16,13 @@ class DusunControllerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->dusunRepository = new DusunRepository(Database::getConnection());
+        $connection = Database::getConnection();
+        $this->dusunRepository = new DusunRepository($connection);
         $this->dusunController = new DusunController();
+        $pesertaRepository = new PesertaRepository($connection);
 
         require __DIR__ . "/../Helper/dummySession.php";
+        $pesertaRepository->deleteAll();
         $this->dusunRepository->deleteAll();
 
         putenv("mode=test");

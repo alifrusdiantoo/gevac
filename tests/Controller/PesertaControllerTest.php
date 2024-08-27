@@ -3,24 +3,41 @@
 namespace Rusdianto\Gevac\Controller;
 
 use PHPUnit\Framework\TestCase;
+use Rusdianto\Gevac\Domain\Dusun;
 use Rusdianto\Gevac\Config\Database;
 use Rusdianto\Gevac\Controller\PesertaController;
+use Rusdianto\Gevac\Repository\DusunRepository;
 use Rusdianto\Gevac\Repository\PesertaRepository;
 
 class PesertaControllerTest extends TestCase
 {
     private PesertaRepository $pesertaRepository;
     private PesertaController $pesertaController;
+    private DusunRepository $dusunRepository;
 
     protected function setUp(): void
     {
-        $this->pesertaRepository = new PesertaRepository(Database::getConnection());
+        $connection = Database::getConnection();
+        $this->pesertaRepository = new PesertaRepository($connection);
         $this->pesertaController = new PesertaController();
+        $this->dusunRepository = new DusunRepository($connection);
+
+        $this->dusunRepository->deleteAll();
+        $this->pesertaRepository->deleteAll();
+
+        $dusun = new Dusun();
+        $dusun->setId("1");
+        $dusun->setNama("Ciawitali");
+        $this->dusunRepository->insert($dusun);
 
         require __DIR__ . "/../Helper/dummySession.php";
         putenv("mode=test");
+    }
 
+    public function tearDown(): void
+    {
         $this->pesertaRepository->deleteAll();
+        $this->dusunRepository->deleteAll();
     }
 
     public function testIndex(): void

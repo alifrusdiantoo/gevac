@@ -37,6 +37,12 @@ class SessionServiceTest extends TestCase
         $this->userRepository->insert($user);
     }
 
+    public function tearDown(): void
+    {
+        $this->sessionRepository->deleteAll();
+        $this->userRepository->deleteAll();
+    }
+
     public function testCreate(): void
     {
         $session = $this->sessionService->create("1");
