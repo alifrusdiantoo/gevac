@@ -4,13 +4,10 @@
             <i class="bi bi-speedometer2"></i>
             <a class="nav-link text-reset" href="/overview">Dashboard</a>
         </li>
+
         <li class="nav-item d-flex align-items-center px-3 <?= preg_match("/^\/(peserta).*/", $_SERVER["REQUEST_URI"]) ? "active" : "" ?>">
             <i class="bi bi-people"></i>
             <a class="nav-link text-reset" href="/peserta">Peserta</a>
-        </li>
-        <li class="nav-item d-flex align-items-center px-3 <?= preg_match("/^\/(profile).*/", $_SERVER["REQUEST_URI"]) ? "active" : "" ?>">
-            <i class="bi bi-person"></i>
-            <a class="nav-link text-reset" href="/profile">Profile</a>
         </li>
 
         <?php if ($model["activeUser"]["role"] === "sup-admin") : ?>
