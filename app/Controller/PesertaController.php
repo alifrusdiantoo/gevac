@@ -46,11 +46,22 @@ class PesertaController
         $pesertaData = $this->pesertaService->getPaginatedPeserta($perPage, $offset)->peserta;
         $totalPeserta = $this->pesertaService->getTotalPesertaCount();
 
-        $peserta = $this->pesertaService->show()->peserta;
-        foreach ($pesertaData as &$p) {
-            $p["nama_dusun"] = $this->dusunRepository->findById($p["id_dusun"])->getNama();
-            $p["tgl_lahir"] = date("d-m-Y", strtotime($p["tgl_lahir"]));
-        }
+        $pesertaData = array_map(function ($value) {
+            return [
+                "id" => trim(strip_tags($value["id"])),
+                "nik" => trim(strip_tags($value["nik"])),
+                "nama" => trim(strip_tags($value["nama"])),
+                "tgl_lahir" => trim(strip_tags(date("d-m-Y", strtotime($value["tgl_lahir"])))),
+                "jenis_kelamin" => trim(strip_tags($value["jenis_kelamin"])),
+                "kontak" => trim(strip_tags($value["kontak"])),
+                "id_dusun" => trim(strip_tags($value["id_dusun"])),
+                "nama_dusun" => trim(strip_tags($this->dusunRepository->findById($value["id_dusun"])->getNama())),
+                "rt" => trim(strip_tags($value["rt"])),
+                "rw" => trim(strip_tags($value["rw"])),
+                "dosis" => trim(strip_tags($value["dosis"]))
+            ];
+        }, $pesertaData);
+
         $data = Helper::prepareViewData($this->sessionService, [
             "title" => "Gevac | Peserta",
             "peserta" => $pesertaData,
@@ -76,15 +87,15 @@ class PesertaController
     {
         $request = new PesertaAddRequest();
         $request->id = Uuid::uuid4()->toString();
-        $request->nik = $_POST["nik"];
-        $request->nama = $_POST["nama"];
-        $request->tglLahir = $_POST["tglLahir"];
-        $request->jenisKelamin = $_POST["jenisKelamin"];
-        $request->kontak = $_POST["kontak"];
-        $request->idDusun = $_POST["dusun"];
-        $request->rt = $_POST["rt"];
-        $request->rw = $_POST["rw"];
-        $request->dosis = $_POST["dosis"];
+        $request->nik =  htmlspecialchars(trim($_POST["nik"]), ENT_QUOTES, "UTF-8");
+        $request->nama =  htmlspecialchars(trim($_POST["nama"]), ENT_QUOTES, "UTF-8");
+        $request->tglLahir =  htmlspecialchars(trim($_POST["tglLahir"]), ENT_QUOTES, "UTF-8");
+        $request->jenisKelamin =  htmlspecialchars(trim($_POST["jenisKelamin"]), ENT_QUOTES, "UTF-8");
+        $request->kontak =  htmlspecialchars(trim($_POST["kontak"]), ENT_QUOTES, "UTF-8");
+        $request->idDusun =  htmlspecialchars(trim($_POST["dusun"]), ENT_QUOTES, "UTF-8");
+        $request->rt =  htmlspecialchars(trim($_POST["rt"]), ENT_QUOTES, "UTF-8");
+        $request->rw =  htmlspecialchars(trim($_POST["rw"]), ENT_QUOTES, "UTF-8");
+        $request->dosis =  htmlspecialchars(trim($_POST["dosis"]), ENT_QUOTES, "UTF-8");
 
         try {
             $response = $this->pesertaService->add($request);
@@ -92,7 +103,7 @@ class PesertaController
                 throw new Exception(implode("", $response->errors));
             }
             $this->index(message: $response->message);
-            echo "<script>history.replaceState({}, '', '/users');</script>";
+            echo "<script>history.replaceState({}, '', '/peserta');</script>";
         } catch (Exception $exception) {
             $this->add(error: $exception->getMessage());
         }
@@ -124,16 +135,16 @@ class PesertaController
     public function postUpdate(): void
     {
         $request = new PesertaUpdateRequest();
-        $request->id = $_POST["id"];
-        $request->nik = $_POST["nik"];
-        $request->nama = $_POST["nama"];
-        $request->tglLahir = $_POST["tglLahir"];
-        $request->jenisKelamin = $_POST["jenisKelamin"];
-        $request->kontak = $_POST["kontak"];
-        $request->idDusun = $_POST["dusun"];
-        $request->rt = $_POST["rt"];
-        $request->rw = $_POST["rw"];
-        $request->dosis = $_POST["dosis"];
+        $request->id = htmlspecialchars(trim($_POST["id"]), ENT_QUOTES, "UTF-8");
+        $request->nik =  htmlspecialchars(trim($_POST["nik"]), ENT_QUOTES, "UTF-8");
+        $request->nama =  htmlspecialchars(trim($_POST["nama"]), ENT_QUOTES, "UTF-8");
+        $request->tglLahir =  htmlspecialchars(trim($_POST["tglLahir"]), ENT_QUOTES, "UTF-8");
+        $request->jenisKelamin =  htmlspecialchars(trim($_POST["jenisKelamin"]), ENT_QUOTES, "UTF-8");
+        $request->kontak =  htmlspecialchars(trim($_POST["kontak"]), ENT_QUOTES, "UTF-8");
+        $request->idDusun =  htmlspecialchars(trim($_POST["dusun"]), ENT_QUOTES, "UTF-8");
+        $request->rt =  htmlspecialchars(trim($_POST["rt"]), ENT_QUOTES, "UTF-8");
+        $request->rw =  htmlspecialchars(trim($_POST["rw"]), ENT_QUOTES, "UTF-8");
+        $request->dosis =  htmlspecialchars(trim($_POST["dosis"]), ENT_QUOTES, "UTF-8");
 
         try {
             $response = $this->pesertaService->updatePeserta($request);

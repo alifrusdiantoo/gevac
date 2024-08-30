@@ -1,4 +1,5 @@
 <main class="row container-fluid m-0 p-0">
+    <?php require __DIR__ . "/../Component/sidebar.php" ?>
     <section class="col bg-light">
         <div class="container-fluid p-0">
             <?php if (!empty($model['message'])) { ?>

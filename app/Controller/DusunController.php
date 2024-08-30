@@ -34,10 +34,17 @@ class DusunController
 
     public function index(string $message = "", string $error = ""): void
     {
-        $dusun = $this->dusunService->show();
+        $dusun = $this->dusunService->show()->dusun;
+        $dusun = array_map(function ($value) {
+            return [
+                "id" => trim(strip_tags($value["id"])),
+                "nama" => trim(strip_tags($value["nama"]))
+            ];
+        }, $dusun);
+
         $data = Helper::prepareViewData($this->sessionService, [
             "title" => "Gevac | Dusun",
-            "dusun" => $dusun->dusun,
+            "dusun" => $dusun,
             "message" => $message,
             "error" => $error
         ]);
@@ -48,7 +55,7 @@ class DusunController
     {
         $request = new DusunAddRequest();
         $request->id = Uuid::uuid4()->toString();
-        $request->nama = $_POST["nama"];
+        $request->nama = htmlspecialchars(trim($_POST["nama"]), ENT_QUOTES, "UTF-8");
 
         try {
             $response = $this->dusunService->add($request);
@@ -81,8 +88,8 @@ class DusunController
     public function update(): void
     {
         $request = new DusunUpdateRequest();
-        $request->id = $_POST["id"];
-        $request->nama = $_POST["nama"];
+        $request->id = htmlspecialchars(trim($_POST["id"]), ENT_QUOTES, "UTF-8");
+        $request->nama = htmlspecialchars(trim($_POST["nama"]), ENT_QUOTES, "UTF-8");
 
         try {
             $response = $this->dusunService->updateDusun($request);

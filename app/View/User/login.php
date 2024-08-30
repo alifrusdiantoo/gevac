@@ -13,7 +13,7 @@
 						<div class="form-group">
 							<label for="username">Username</label>
 							<div class="input-group flex-nowrap">
-								<input type="text" class="form-control" id="username" name="username" placeholder="john.doe" aria-label="Username" aria-describedby="addon-wrapping" autocomplete="off">
+								<input type="text" class="form-control" id="username" name="username" value="<?= $_POST["username"] ?? "" ?>" placeholder="john.doe" aria-label="Username" aria-describedby="addon-wrapping" autocomplete="off">
 							</div>
 						</div>
 

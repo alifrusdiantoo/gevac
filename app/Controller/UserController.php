@@ -57,10 +57,10 @@ class UserController
     {
         $request = new UserRegisterRequest();
         $request->id = Uuid::uuid4()->toString();
-        $request->nama = $_POST["nama"];
-        $request->username = $_POST["username"];
-        $request->password = $_POST["password"];
-        $request->roles = $_POST["roles"];
+        $request->nama = htmlspecialchars(trim($_POST["nama"]), ENT_QUOTES, "UTF-8");
+        $request->username = htmlspecialchars(trim($_POST["username"]), ENT_QUOTES, "UTF-8");
+        $request->password = htmlspecialchars(trim($_POST["password"]), ENT_QUOTES, "UTF-8");
+        $request->roles = htmlspecialchars(trim($_POST["roles"]), ENT_QUOTES, "UTF-8");
 
         try {
             $response = $this->userService->register($request);
@@ -81,8 +81,8 @@ class UserController
     public function postLogin(): void
     {
         $request = new UserLoginRequest();
-        $request->username = $_POST["username"];
-        $request->password = $_POST["password"];
+        $request->username = htmlspecialchars(trim($_POST["username"]), ENT_QUOTES, "UTF-8");;
+        $request->password = htmlspecialchars(trim($_POST["password"]), ENT_QUOTES, "UTF-8");;
 
         try {
             $response = $this->userService->login($request);
@@ -136,10 +136,10 @@ class UserController
     public function postUpdateProfile(): void
     {
         $request = new UserProfileUpdateRequest();
-        $request->id = $_POST["id"];
-        $request->nama = $_POST["nama"];
-        $request->username = $_POST["username"];
-        $request->roles = $_POST["roles"];
+        $request->id = htmlspecialchars(trim($_POST["id"]), ENT_QUOTES, "UTF-8");
+        $request->nama = htmlspecialchars(trim($_POST["nama"]), ENT_QUOTES, "UTF-8");
+        $request->username = htmlspecialchars(trim($_POST["username"]), ENT_QUOTES, "UTF-8");
+        $request->roles = htmlspecialchars(trim($_POST["roles"]), ENT_QUOTES, "UTF-8");
 
         try {
             $response = $this->userService->updateProfile($request);
@@ -153,21 +153,24 @@ class UserController
     public function updatePassword(string $id, string $message = ""): void
     {
         $user = $this->userService->getProfile($id);
-        View::render("User/password", [
+        $data = Helper::prepareViewData($this->sessionService, [
             "title" => "Gevac | Tambah User",
             "user" => [
-                "id" => $user->getId()
+                "id" => $user->getId(),
+                "password" => $user->getPassword()
             ],
             "message" => $message
         ]);
+
+        View::render("User/password", $data);
     }
 
     public function postUpdatePassword(): void
     {
         $request = new UserPasswordUpdateRequest();
-        $request->id = $_POST["id"];
-        $request->oldPassword = $_POST["oldPassword"];
-        $request->newPassword = $_POST["newPassword"];
+        $request->id = htmlspecialchars(trim($_POST["id"]), ENT_QUOTES, "UTF-8");
+        $request->oldPassword = htmlspecialchars(trim($_POST["oldPassword"]), ENT_QUOTES, "UTF-8");
+        $request->newPassword = htmlspecialchars(trim($_POST["newPassword"]), ENT_QUOTES, "UTF-8");
 
         try {
             $response = $this->userService->updatePassword($request);
