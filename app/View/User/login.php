@@ -1,6 +1,6 @@
 <main>
-	<div class="container-fluid vh-100 w-50 d-flex justify-content-center align-items-center">
-		<div class="row">
+	<div class="container-fluid vh-100 w-25 d-flex justify-content-center align-items-center">
+		<div class="row flex-fill">
 			<?php if (isset($model['message'])) { ?>
 				<div class="alert alert-danger" role="alert">
 					<?= $model['message']; ?>
@@ -13,16 +13,14 @@
 						<div class="form-group">
 							<label for="username">Username</label>
 							<div class="input-group flex-nowrap">
-								<span class="input-group-text" id="addon-wrapping"><i class="bi bi-person-fill"></i></span>
-								<input type="text" class="form-control" id="username" name="username" placeholder="Username" aria-label="Username" aria-describedby="addon-wrapping">
+								<input type="text" class="form-control" id="username" name="username" placeholder="john.doe" aria-label="Username" aria-describedby="addon-wrapping" autocomplete="off">
 							</div>
 						</div>
 
 						<div class="form-group mb-3">
 							<label for="password">Password</label>
 							<div class="input-group flex-nowrap">
-								<span class="input-group-text" id="addon-wrapping"><i class="bi bi-key-fill"></i></span>
-								<input type="password" class="form-control" id="password" name="password" placeholder="Password" aria-label="Password" aria-describedby="addon-wrapping">
+								<input type="password" class="form-control" id="password" name="password" placeholder="**********" aria-label="Password" aria-describedby="addon-wrapping">
 							</div>
 						</div>
 
