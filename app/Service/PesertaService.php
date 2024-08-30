@@ -82,6 +82,25 @@ class PesertaService
         return $this->pesertaRepository->findById($id);
     }
 
+    public function getPaginatedPeserta(int $limit, int $offset): PesertaShowResponse
+    {
+        $response = new PesertaShowResponse();
+        try {
+            $peserta = $this->pesertaRepository->getPaginatedPeserta($limit, $offset);
+            $response->peserta = $peserta;
+            $response->success = true;
+        } catch (Exception $exception) {
+            $response->success = false;
+            $response->message = $exception->getMessage();
+        }
+        return $response;
+    }
+
+    public function getTotalPesertaCount(): int
+    {
+        return $this->pesertaRepository->getTotalPesertaCount();
+    }
+
     public function updatePeserta(PesertaUpdateRequest $request): PesertaUpdateResponse
     {
         $response = new PesertaUpdateResponse();

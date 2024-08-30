@@ -14,7 +14,7 @@
                     <div class="row mb-3">
                         <div class="col">
                             <label for="nik" class="form-label">NIK</label>
-                            <input type="text" inputmode="numeric" pattern="[0-9]{16}" class="form-control" id="nik" name="nik" placeholder="320xxxxxx" maxlength="16" value="<?= $_POST["nik"] ?? "" ?>" required />
+                            <input type="text" inputmode="numeric" pattern="[0-9]{16}" class="form-control" id="nik" name="nik" placeholder="320xxxxxx" maxlength="16" value="<?= $_POST["nik"] ?? "" ?>" autofocus required />
                         </div>
                         <div class="col">
                             <label for="tglLahir" class="form-label">Tanggal Lahir</label>

@@ -24,6 +24,26 @@ class PesertaRepository
         return $result;
     }
 
+    public function getPaginatedPeserta(int $limit, int $offset): ?array
+    {
+        $query = "SELECT id, nik, nama, tgl_lahir, jenis_kelamin, kontak, id_dusun, rt, rw, dosis FROM participants ORDER BY added_at LIMIT :limit OFFSET :offset";
+        $statement = $this->connection->prepare($query);
+        $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $statement->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $statement->execute();
+
+        return $statement->fetchAll();
+    }
+
+    public function getTotalPesertaCount(): int
+    {
+        $query = "SELECT COUNT(*) FROM participants";
+        $statement = $this->connection->prepare($query);
+        $statement->execute();
+
+        return $statement->fetchColumn();
+    }
+
     public function insert(Peserta $peserta): Peserta
     {
         $query = "INSERT INTO participants(id, nik, nama, tgl_lahir, jenis_kelamin, kontak, id_dusun, rt, rw, dosis) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";

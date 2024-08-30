@@ -38,16 +38,24 @@ class PesertaController
         $this->pesertaService = new PesertaService($pesertaRepository, $this->dusunRepository);
     }
 
-    public function index(string $message = "", string $error = ""): void
+    public function index(int $page = 1, string $message = "", string $error = ""): void
     {
+        $page = $_GET["page"] ?? 1;
+        $perPage = 10;
+        $offset = ($page - 1) * $perPage;
+        $pesertaData = $this->pesertaService->getPaginatedPeserta($perPage, $offset)->peserta;
+        $totalPeserta = $this->pesertaService->getTotalPesertaCount();
+
         $peserta = $this->pesertaService->show()->peserta;
-        foreach ($peserta as &$p) {
+        foreach ($pesertaData as &$p) {
             $p["nama_dusun"] = $this->dusunRepository->findById($p["id_dusun"])->getNama();
             $p["tgl_lahir"] = date("d-m-Y", strtotime($p["tgl_lahir"]));
         }
         $data = Helper::prepareViewData($this->sessionService, [
             "title" => "Gevac | Peserta",
-            "peserta" => $peserta,
+            "peserta" => $pesertaData,
+            "currentPage" => $page,
+            "totalPages" => ceil($totalPeserta / $perPage),
             "message" => $message,
             "error" => $error
         ]);
