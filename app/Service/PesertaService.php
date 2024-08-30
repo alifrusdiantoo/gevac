@@ -2,7 +2,14 @@
 
 namespace Rusdianto\Gevac\Service;
 
+use DateTime;
 use Exception;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Rusdianto\Gevac\Config\Database;
 use Rusdianto\Gevac\Domain\Peserta;
 use Rusdianto\Gevac\DTO\PesertaAddRequest;
@@ -166,5 +173,80 @@ class PesertaService
     public function getOverviewStatistics(): array
     {
         return $this->pesertaRepository->getStatistic();
+    }
+
+    public function printPesertaData(): void
+    {
+        $headers = [
+            "No",
+            "NIK",
+            "NAMA",
+            "TANGGAL LAHIR",
+            "DUSUN",
+            "RT",
+            "RW",
+            "JK",
+            "DOSIS",
+            "KONTAK"
+        ];
+
+        $data = $this->show()->peserta;
+        foreach ($data as &$p) {
+            $p["nama_dusun"] = $this->dusunRepository->findById($p["id_dusun"])->getNama();
+            $date = new DateTime($p["tgl_lahir"]);
+            $p["tgl_lahir"] = $date->format("d-m-Y");
+        }
+
+        $spreadsheet = new Spreadsheet();
+        $activeWorksheet = $spreadsheet->getActiveSheet();
+
+        $activeWorksheet->setCellValue([1, 1], "DATA REKAPITULASI VAKSINISASI DI DESA GEREBA");
+        $activeWorksheet->mergeCells("A1:J1");
+        $activeWorksheet->getStyle("A1")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $activeWorksheet->getStyle("A1")->getFont()->setSize(14);
+
+        foreach ($headers as $index => $header) {
+            $activeWorksheet->setCellValue([$index + 1, 2], $header);
+        }
+
+        $activeWorksheet->getStyle("A1:J2")->getFont()->setBold(true);
+
+        $activeWorksheet->getColumnDimension("A")->setAutoSize(true);
+        $activeWorksheet->getColumnDimension("B")->setAutoSize(true);
+        $activeWorksheet->getColumnDimension("C")->setAutoSize(true);
+        $activeWorksheet->getColumnDimension("D")->setAutoSize(true);
+        $activeWorksheet->getColumnDimension("E")->setAutoSize(true);
+        $activeWorksheet->getColumnDimension("F")->setAutoSize(true);
+        $activeWorksheet->getColumnDimension("G")->setAutoSize(true);
+        $activeWorksheet->getColumnDimension("H")->setAutoSize(true);
+        $activeWorksheet->getColumnDimension("I")->setAutoSize(true);
+        $activeWorksheet->getColumnDimension("J")->setAutoSize(true);
+
+        $i = 0;
+        foreach ($data as $peserta) {
+            $activeWorksheet->setCellValue([1, $i + 3], $i + 1);
+            $activeWorksheet->setCellValueExplicit([2, $i + 3], $peserta["nik"], DataType::TYPE_STRING);
+            $activeWorksheet->setCellValue([3, $i + 3], $peserta["nama"]);
+            $activeWorksheet->setCellValue([4, $i + 3], $peserta["tgl_lahir"]);
+            $activeWorksheet->setCellValue([5, $i + 3], $peserta["nama_dusun"]);
+            $activeWorksheet->setCellValue([6, $i + 3], $peserta["rt"]);
+            $activeWorksheet->setCellValue([7, $i + 3], $peserta["rw"]);
+            $activeWorksheet->setCellValue([8, $i + 3], $peserta["jenis_kelamin"]);
+            $activeWorksheet->setCellValue([9, $i + 3], $peserta["dosis"]);
+            $activeWorksheet->setCellValue([10, $i + 3], $peserta["kontak"]);
+            $i++;
+        }
+
+        $range = "A2:J" . sizeof($data) + 2;
+        $activeWorksheet->getStyle($range)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $activeWorksheet->getStyle($range)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color("#000000"));
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="Data Peserta.xlsx"');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+
+        exit;
     }
 }

@@ -23,6 +23,7 @@ Router::add("POST", "/peserta/add", PesertaController::class, "postAdd", [MustLo
 Router::add("POST", "/peserta/{id}", PesertaController::class, "delete", [MustLoginMiddleware::class]);
 Router::add("GET", "/peserta/edit/{id}", PesertaController::class, "update", [MustLoginMiddleware::class]);
 Router::add("POST", "/peserta/edit/{id}", PesertaController::class, "postUpdate", [MustLoginMiddleware::class]);
+Router::add("GET", "/peserta/print", PesertaController::class, "printData", [MustLoginMiddleware::class]);
 
 // Dusun controller
 Router::add("GET", "/dusun", DusunController::class, "index", [MustLoginMiddleware::class, SupAdminOnlyMiddleware::class]);

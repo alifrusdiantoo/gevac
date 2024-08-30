@@ -12,7 +12,8 @@
             <div class="card p-4 w-100">
                 <p class="fs-6 mb-4"><b>Data Peserta</b></p>
                 <div class="d-flex-inline mb-3">
-                    <a class="btn btn-sm btn-primary" href="/peserta/add" role="button"><i class="bi bi-plus"></i>Tambah</a>
+                    <a class="btn btn-sm btn-primary" href="/peserta/add" role="button"><i class="bi bi-plus"></i> Tambah</a>
+                    <a class="btn btn-sm btn-success" href="/peserta/print" role="button"><i class="bi bi-printer"></i> Print Data</a>
                 </div>
 
                 <div class="table-responsive">
@@ -37,7 +38,7 @@
                                 <tr class="text-center">
                                     <th><?= $i++ ?></th>
                                     <td><?= $peserta["nik"] ?></td>
-                                    <td><?= $peserta["nama"] ?></td>
+                                    <td class="text-start"><?= $peserta["nama"] ?></td>
                                     <td><?= $peserta["tgl_lahir"]; ?></td>
                                     <td><?= $peserta["nama_dusun"] ?> RT <?= $peserta["rt"] ?>/RW <?= $peserta["rw"] ?></td>
                                     <td><?= $peserta["jenis_kelamin"] ?></td>
@@ -57,21 +58,21 @@
                     </table>
                 </div>
 
-                <!-- <nav aria-label="pagination data peserta vaksin" class="d-flex justify-content-end">
+                <nav aria-label="pagination data peserta vaksin" class="d-flex justify-content-end">
                     <ul class="pagination pagination-sm">
-                        <li class="page-item disabled">
-                            <a class="page-link">Previous</a>
+                        <li class="page-item <?= $model["currentPage"] == 1 ? "disabled" : "" ?>">
+                            <a class="page-link" href="?page=<?= $model["currentPage"] - 1 ?>">Previous</a>
                         </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item active" aria-current="page">
-                            <a class="page-link" href="#">2</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
+                        <?php for ($i = 1; $i <= $model["totalPages"]; $i++): ?>
+                            <li class="page-item <?= $i == $model["currentPage"] ? "active" : "" ?>" aria-current="page">
+                                <a class="page-link" href="?page=<?= $i ?>"><?= $i; ?></a>
+                            </li>
+                        <?php endfor; ?>
+                        <li class="page-item <?= $model["currentPage"] == $model["totalPages"] ? "disabled" : "" ?>">
+                            <a class="page-link" href="?page=<?= $model["currentPage"] + 1 ?>">Next</a>
                         </li>
                     </ul>
-                </nav> -->
+                </nav>
             </div>
         </div>
     </section>

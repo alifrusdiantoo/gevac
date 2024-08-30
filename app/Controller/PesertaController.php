@@ -161,4 +161,9 @@ class PesertaController
             echo "<script>history.replaceState({}, '', '/peserta');</script>";
         }
     }
+
+    public function printData(): void
+    {
+        $this->pesertaService->printPesertaData();
+    }
 }
