@@ -33,7 +33,7 @@
                         </thead>
 
                         <tbody>
-                            <?php $i = 1; ?>
+                            <?php $i = $model["startIndex"] ?>
                             <?php foreach ($model["peserta"] as $peserta) : ?>
                                 <tr class="text-center">
                                     <th><?= $i++ ?></th>

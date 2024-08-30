@@ -67,6 +67,7 @@ class PesertaController
             "peserta" => $pesertaData,
             "currentPage" => $page,
             "totalPages" => ceil($totalPeserta / $perPage),
+            "startIndex" => ($page - 1) * $perPage + 1,
             "message" => $message,
             "error" => $error
         ]);
