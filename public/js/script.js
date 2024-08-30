@@ -15,14 +15,29 @@ function closeModal(modalId) {
     modal.hide();
 }
 
-function openEditModal(id, name) {
-    document.getElementById('edit-category-form').action = '/dashboard/categories/' + id;
-    document.getElementById('edit-category-name').value = name;
-    openModal('edit-category-modal');
+function openAddModal(data) {
+    document.getElementById('add-data-form').action = `/${data}/add`;
+    openModal('add-data-modal');
 }
 
-function openDeleteModal(id) {
-    document.getElementById('delete-category-form').action = '/dashboard/categories/' + id;
-    document.getElementById('id-category').innerHTML = id;
-    openModal('delete-category-modal');
+function openEditModal(id, name, data) {
+    document.getElementById('edit-data-form').action = `/${data}/edit/` + id;
+    document.getElementById('edit-data-id').value = id;
+    document.getElementById('edit-data-name').value = name;
+    openModal('edit-data-modal');
+}
+
+function openDeleteModal(id, data) {
+    document.getElementById('delete-data-form').action = `/${data}/` + id;
+    document.getElementById('id-data').innerHTML = id;
+    openModal('delete-data-modal');
+}
+
+if(window.location.pathname.match("[peserta/add]") || window.location.pathname.match("[peserta/edit/]")) {
+    // Validate tanggal lahir input
+    const today = new Date();
+    const maxDate = new Date(today.getFullYear() - 6, today.getMonth(), today.getDate());
+    const maxDateStr = maxDate.toISOString().split('T')[0];
+
+    document.getElementById('tglLahir').setAttribute('max', maxDateStr);
 }
