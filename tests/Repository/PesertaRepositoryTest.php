@@ -99,6 +99,25 @@ class PesertaRepositoryTest extends TestCase
         self::assertEquals("3207116504630001", $result[0]["nik"]);
     }
 
+    public function testGetPaginatedPeserta(): void
+    {
+        $peserta = new Peserta();
+        $peserta->setId("1");
+        $peserta->setNik("3207116504630001");
+        $peserta->setNama("John Doe");
+        $peserta->setTglLahir("1963-04-25");
+        $peserta->setKontak("080123456789");
+        $peserta->setIdDusun("1");
+        $peserta->setRt("001");
+        $peserta->setRw("001");
+        $peserta->setJenisKelamin("L");
+        $peserta->setDosis("1");
+        $this->pesertaRepository->insert($peserta);
+
+        $result = $this->pesertaRepository->getPaginatedPeserta(10, 0);
+        self::assertNotNull($result);
+    }
+
     public function testDelete(): void
     {
         $peserta = new Peserta();
